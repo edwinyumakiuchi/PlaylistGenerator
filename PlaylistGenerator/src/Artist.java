@@ -7,7 +7,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class Artist implements Comparable<Artist>{
+public class Artist{
 
 	public String name = "";
 	public Artist[] similarArtist = new Artist[20];
@@ -70,6 +70,19 @@ public class Artist implements Comparable<Artist>{
 	public void setAdvancedSimilarArtist(Artist[] similarArtistList, int indexOfHeaderArtist) throws UnsupportedEncodingException, IOException {
 		
 		if (indexOfHeaderArtist == 0)
+			advancedSimilarArtist[advancedSimilarArtistIndex++] = this;
+		else 
+			advancedSimilarArtist[advancedSimilarArtistIndex++] = this.similarArtist[indexOfHeaderArtist-1];
+		
+		System.out.println(advancedSimilarArtist[advancedSimilarArtistIndex-1].name);
+		
+		for (int i = 0; i < similarArtistList.length - 1; i++) {
+			
+			advancedSimilarArtist[advancedSimilarArtistIndex++] = similarArtistList[i];
+			System.out.println(advancedSimilarArtist[advancedSimilarArtistIndex-1].name);
+		}
+		
+		/* if (indexOfHeaderArtist == 0)
 			advancedSimilarArtist[advancedSimilarArtistIndex++] = new Artist(this.name);
 		else 
 			advancedSimilarArtist[advancedSimilarArtistIndex++] = new Artist(this.similarArtist[indexOfHeaderArtist-1].name);
@@ -78,10 +91,9 @@ public class Artist implements Comparable<Artist>{
 		
 		for (int i = 0; i < similarArtistList.length - 1; i++) {
 			
-			// System.out.println("advancedSimilarArtistIndex = " + advancedSimilarArtistIndex);
 			advancedSimilarArtist[advancedSimilarArtistIndex++] = new Artist(similarArtistList[i].name);
 			System.out.println(advancedSimilarArtist[advancedSimilarArtistIndex-1].name);
-		}
+		} */
 		
 		System.out.println("===========================================");
 	}
@@ -98,14 +110,16 @@ public class Artist implements Comparable<Artist>{
 				
 				if (playlist[j].name.equals(advancedSimilarArtist[i].name)) {
 				
-					playlist[j].value += (advancedSimilarArtist[i].scrobble + 1);
+					// playlist[j].value += (advancedSimilarArtist[i].scrobble + 1);
+					playlist[j].value += (advancedSimilarArtist[i].scrobble + 1) * (400 - playlistIndex);
 					artistInserted = true;
 				}
 			}
 			
 			if (!artistInserted) {
 				playlist[playlistIndex] = advancedSimilarArtist[i];
-				playlist[playlistIndex++].value = advancedSimilarArtist[i].scrobble + 1;
+				// playlist[playlistIndex++].value = (advancedSimilarArtist[i].scrobble + 1);
+				playlist[playlistIndex++].value = (advancedSimilarArtist[i].scrobble + 1) * (400 - playlistIndex);
 			}
 			
 			
@@ -151,6 +165,8 @@ public class Artist implements Comparable<Artist>{
 		
 		String formattedName = java.net.URLEncoder.encode(name.replace(" ", "+"), "UTF-8");
 		
+		formattedName = formattedName.replace("%26%2334%3B","\"");
+		
 		URL url = new URL("http://www.last.fm/user/edwinyumakiuchi/library/music/" + formattedName);
 		
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"))) {
@@ -167,20 +183,6 @@ public class Artist implements Comparable<Artist>{
 		    	}
 		    }
 		}
-	}
-
-	@Override
-	public int compareTo(Artist o) {
-		
-		int returnValue = 0;
-		
-		if (o == null)
-			returnValue = 1;
-		else if (this == null)
-			returnValue = -1;
-		else returnValue = o.value - this.value;
-		
-		return returnValue;
 	}
 	
 	/* public boolean equals(Artist o) {

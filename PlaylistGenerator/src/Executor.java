@@ -6,11 +6,11 @@ public class Executor {
 
 	public static void main(String[] args) throws UnsupportedEncodingException, IOException {
 		
-		/* Scanner reader = new Scanner(System.in);
+		Scanner reader = new Scanner(System.in);
 		System.out.println("Enter an artist: ");
-		String inputArtist = reader.nextLine(); */
+		String inputArtist = reader.nextLine();
 		
-		String inputArtist = "Arcade Fire";
+		// String inputArtist = "Gorillaz";
 		
 		// System.out.println("inputArtist = " + inputArtist);
 		
